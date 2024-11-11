@@ -1,10 +1,10 @@
 <?php
 
-include_once("model/ProgramKerja.php");
+include_once '../model/ProgramKerja.php';
 
 class ProgramKerjaController 
 {
-    private $programModel;
+    public $programModel;
 
     public function __construct()
     {
@@ -16,28 +16,58 @@ class ProgramKerjaController
         include("views/add_proker.php");
     }
 
-    public function viewEditProker()
+    public function viewEditProker($nomorProgram)
     {
+        $program = $this->programModel->fetchOneProgramKerja($nomorProgram);
         include("views/edit_proker.php");
     }
 
     public function viewListProker()
     {
+        $programList = $this->programModel->fetchAllProgramKerja();
         include("views/list_proker.php");
     }
 
     public function addProker()
     {
-        // implementasi logic nambah proker dengan pemanggila model juga
+        $nomor = $_POST['nomor'];
+        $nama = $_POST['nama'];
+        $suratKeterangan = $_POST['surat_keterangan'];
+
+        $this->programModel->createModel($nomor, $nama, $suratKeterangan);
+
+        if ($this->programModel->insertProgramKerja()) {
+            header("Location: list_proker.php");
+            exit();
+        } else {
+            echo "Gagal menambahkan program kerja!";
+        }
     }
 
     public function updateProker()
     {
-        // implementasi logic update proker dengan pemanggila model juga
+        $nomor = $_POST['nomor'];
+        $nama = $_POST['nama'];
+        $suratKeterangan = $_POST['surat_keterangan'];
+
+        $this->programModel->createModel($nomor, $nama, $suratKeterangan);
+
+        if ($this->programModel->updateProgramKerja()) {
+            header("Location: list_proker.php");
+            exit();
+        } else {
+            echo "Gagal memperbarui program kerja!";
+        }
     }
 
-    public function deleteProker()
+    public function deleteProker($nomor)
     {
-        // implementasi logic hapus proker dengan pemanggila model juga
+        if ($this->programModel->deleteProgramKerja($nomor)) {
+            header("Location: list_proker.php");
+            exit();
+        } else {
+            echo "Gagal menghapus program kerja!";
+        }
     }
 }
+?>
